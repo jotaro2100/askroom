@@ -28,9 +28,13 @@
             @endif
 
             <!-- Page Content -->
-            <main>
+            <main class="min-h-screen pt-[65px] pb-[57px]">
                 {{ $slot }}
             </main>
+
+            <div class="relative">
+                @include('layouts.footer')
+            </div>
         </div>
     </body>
 </html>
