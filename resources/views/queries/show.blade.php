@@ -2,7 +2,7 @@
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="flex justify-between items-center">
-                <div class="text-lg text-white">
+                <div class="text-lg text-blue-500">
                     &lsaquo;&lsaquo; <a href="{{ route('queries.index') }}" class="hover:underline">一覧に戻る</a>
                 </div>
                 @if($query->user == Auth::user())
