@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QueryController;
+use App\Http\Controllers\AnswerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,34 +21,25 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', [QueryController::class, 'index'])
+    Route::get('/', [QueryController::class, 'index']) //質問一覧ページ
         ->name('queries.index');
-    Route::get('/my_queries', [QueryController::class, 'myQueries'])
+    Route::resource('queries', QueryController::class); //質問CRUD
+
+    Route::get('/my_queries', [QueryController::class, 'myQueries']) //自分の質問ページ
         ->name('queries.my_queries');
-    Route::get('/answered_queries', [AnswerController::class, 'index'])
+    Route::get('/answered_queries', [AnswerController::class, 'index']) //回答した質問ページ
         ->name('answers.index');
 
-    Route::get('/queries/{query}', [QueryController::class, 'show'])
-        ->name('queries.show')
+    Route::post('/queries/{query}/answers', [AnswerController::class, 'store']) //回答C
+        ->name('answers.store')
         ->where('query', '[0-9]+');
+    Route::name('answers.')->prefix('queries/{query}/answers/{answer}')->group(function () { //回答UD
+        Route::get('/edit', [AnswerController::class, 'edit'])->name('edit');
+        Route::patch('/update', [AnswerController::class, 'update'])->name('update');
+        Route::delete('/destroy', [AnswerController::class, 'destroy'])->name('destroy');
+    });
 
-    Route::get('/queries/create', [QueryController::class, 'create'])
-        ->name('queries.create');
-    Route::post('/queries/store', [QueryController::class, 'store'])
-        ->name('queries.store');
-
-    Route::get('/queries/{query}/edit', [QueryController::class, 'edit'])
-        ->name('queries.edit')
-        ->where('query', '[0-9]+');
-    Route::patch('/queries/{query}/update', [QueryController::class, 'update'])
-        ->name('queries.update')
-        ->where('query', '[0-9]+');
-
-    Route::delete('/queries/{query}/destroy', [QueryController::class, 'destroy'])
-        ->name('queries.destroy')
-        ->where('query', '[0-9]+');
-
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit'); //Breeze関係
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
