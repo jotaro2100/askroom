@@ -21,7 +21,7 @@ class QueryController extends Controller
 
     public function myQueries()
     {
-        $queries = Auth::user()->queries->sortByDesc('updated_at');;
+        $queries = Auth::user()->queries->sortByDesc('updated_at');
         $title = [
             'title' => '自分の質問',
         ];
