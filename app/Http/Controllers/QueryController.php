@@ -68,4 +68,12 @@ class QueryController extends Controller
         return redirect()
             ->route('queries.show', $query);
     }
+
+    public function destroy(Query $query)
+    {
+        $query->delete();
+
+        return redirect()
+            ->route('queries.index');
+    }
 }

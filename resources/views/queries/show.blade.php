@@ -6,10 +6,20 @@
                     &lsaquo;&lsaquo; <a href="{{ route('queries.index') }}" class="hover:underline">一覧に戻る</a>
                 </div>
                 @if($query->user == Auth::user())
-                    <div>
-                        <a href="{{ route('queries.edit', $query) }}" type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm font-bold px-3 py-2 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
-                            質問を編集
-                        </a>
+                    <div class="flex items-center">
+                        <div class="mr-5">
+                            <a href="{{ route('queries.edit', $query) }}" type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm font-bold px-2 py-2 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+                                質問を編集
+                            </a>
+                        </div>
+                        <form onsubmit="return confirm('本当に削除しますか？')" action="{{ route('queries.destroy', $query) }}" method="post">
+                            @method('DELETE')
+                            @csrf
+
+                            <button class="text-red-500 hover:underline text-sm">
+                                質問を削除
+                            </button>
+                        </form>
                     </div>
                 @endif
             </div>
@@ -68,4 +78,7 @@
             @endforelse
         </div>
     </div>
+    <script>
+
+    </script>
 </x-app-layout>
