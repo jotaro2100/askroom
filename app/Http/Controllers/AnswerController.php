@@ -42,6 +42,7 @@ class AnswerController extends Controller
     {
         $editing = true;
         $edit_answer_id = $answer->id;
+
         return view('queries.show')
             ->with([
                 'query' => $query,
