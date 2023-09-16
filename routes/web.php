@@ -24,6 +24,8 @@ Route::middleware('auth')->group(function () {
         ->name('queries.index');
     Route::get('/my_queries', [QueryController::class, 'myQueries'])
         ->name('queries.my_queries');
+    Route::get('/answered_queries', [AnswerController::class, 'index'])
+        ->name('answers.index');
 
     Route::get('/queries/{query}', [QueryController::class, 'show'])
         ->name('queries.show')

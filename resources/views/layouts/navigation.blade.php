@@ -18,7 +18,7 @@
                     <x-nav-link :href="route('queries.my_queries')" :active="request()->routeIs('queries.my_queries')">
                         自分の質問
                     </x-nav-link>
-                    <x-nav-link>
+                    <x-nav-link :href="route('answers.index')" :active="request()->routeIs('answers.index')">
                         回答した質問
                     </x-nav-link>
                     <x-nav-link>
