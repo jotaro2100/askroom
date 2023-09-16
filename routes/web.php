@@ -33,6 +33,14 @@ Route::middleware('auth')->group(function () {
         ->name('queries.create');
     Route::post('/queries/store', [QueryController::class, 'store'])
         ->name('queries.store');
+
+    Route::get('/queries/{query}/edit', [QueryController::class, 'edit'])
+        ->name('queries.edit')
+        ->where('query', '[0-9]+');
+    Route::patch('/queries/{query}/update', [QueryController::class, 'update'])
+        ->name('queries.update')
+        ->where('query', '[0-9]+');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

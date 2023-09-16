@@ -52,4 +52,20 @@ class QueryController extends Controller
         return redirect()
             ->route('queries.index');
     }
+
+    public function edit(Query $query)
+    {
+        return view('queries.edit')
+            ->with(['query' => $query]);
+    }
+
+    public function update(Request $request, Query $query)
+    {
+        $query->title = $request->title;
+        $query->content = $request->content;
+        $query->save();
+
+        return redirect()
+            ->route('queries.show', $query);
+    }
 }
