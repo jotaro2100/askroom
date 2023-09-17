@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="py-12">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8 space-y-6">
+        <div class="px-2 max-w-3xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div>
                 <h1 class="flex justify-between mb-8 text-3xl">
                     <span class="text-gray-900 dark:text-white border-b-[1px]">{{ $title }}</span>
@@ -9,7 +9,7 @@
             </div>
             @forelse ($queries as $query)
                 <div>
-                    <a href="{{ route('queries.show', $query) }}" class="block h-[200px] mb-8 p-6 bg-white border-[2px] border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-900 dark:border-gray-700 dark:hover:bg-gray-700">
+                    <a href="{{ route('queries.show', $query) }}" class="block h-[200px] mb-4 p-6 bg-white border-[2px] border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-900 dark:border-gray-700 dark:hover:bg-gray-700">
                         <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                             {{ $query->title }}
                         </h5>
