@@ -21,7 +21,7 @@
                     <x-nav-link :href="route('answers.index')" :active="request()->routeIs('answers.index')">
                         回答した質問
                     </x-nav-link>
-                    <x-nav-link>
+                    <x-nav-link :href="route('additions.index')" :active="request()->routeIs('additions.index')">
                         補足した質問
                     </x-nav-link>
                 </div>

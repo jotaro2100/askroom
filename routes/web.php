@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QueryController;
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\AdditionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +30,8 @@ Route::middleware('auth')->group(function () {
         ->name('queries.my_queries');
     Route::get('/answered_queries', [AnswerController::class, 'index']) //回答した質問ページ
         ->name('answers.index');
+    Route::get('/additions_queries', [AdditionController::class, 'index']) //補足した質問ページ
+        ->name('additions.index');
 
     Route::post('/queries/{query}/answers', [AnswerController::class, 'store']) //回答C
         ->name('answers.store')
