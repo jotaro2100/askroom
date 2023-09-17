@@ -18,6 +18,7 @@ class AnswerController extends Controller
             $queries[] = $answer->rootQuery;
         };
 
+        $queries = array_unique($queries);
         $title = [
             'title' => '回答した質問',
         ];
