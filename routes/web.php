@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QueryController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AdditionController;
+use App\Models\Query;
+use App\Models\Answer;
+use App\Models\Addition;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::model('query', Query::class);
+Route::model('answer', Answer::class);
+Route::model('addition', Addition::class);
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,8 +40,7 @@ Route::middleware('auth')->group(function () {
         ->name('additions.index');
 
     Route::post('/queries/{query}/answers', [AnswerController::class, 'store']) //回答C
-        ->name('answers.store')
-        ->where('query', '[0-9]+');
+        ->name('answers.store');
     Route::name('answers.')->prefix('queries/{query}/answers/{answer}')->group(function () { //回答UD
         Route::get('/edit', [AnswerController::class, 'edit'])->name('edit');
         Route::patch('/update', [AnswerController::class, 'update'])->name('update');
