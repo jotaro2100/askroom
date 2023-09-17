@@ -33,10 +33,12 @@ class QueryController extends Controller
     public function show(Query $query)
     {
         $editing = false;
+
         return view('queries.show')
             ->with([
                 'query' => $query,
-                'editing' => $editing,
+                'answer_editing' => $editing,
+                'addition_editing' => $editing,
             ]);
     }
 

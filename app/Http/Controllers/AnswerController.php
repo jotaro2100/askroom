@@ -43,11 +43,13 @@ class AnswerController extends Controller
     {
         $editing = true;
         $edit_answer_id = $answer->id;
+
         return view('queries.show')
             ->with([
                 'query' => $query,
                 'answer' => $answer,
-                'editing' => $editing,
+                'answer_editing' => $editing,
+                'addition_editing' => false,
                 'edit_answer_id' => $edit_answer_id,
             ]);
     }
@@ -60,7 +62,7 @@ class AnswerController extends Controller
 
         return redirect()
             ->route('queries.show', $query)
-            ->with(['editing' => $editing]);
+            ->with(['answer_editing' => $editing]);
     }
 
     public function destroy(Query $query, Answer $answer)
