@@ -47,6 +47,14 @@ Route::middleware('auth')->group(function () {
         Route::delete('/destroy', [AnswerController::class, 'destroy'])->name('destroy');
     });
 
+    Route::post('/queries/{query}/answers/{answer}/additions', [AdditionController::class, 'store']) //補足C
+        ->name('additions.store');
+    Route::name('additions.')->prefix('queries/{query}/answers/{answer}/additions/{addition}')->group(function () { //補足UD
+        Route::get('/edit', [AdditionController::class, 'edit'])->name('edit');
+        Route::patch('/update', [AdditionController::class, 'update'])->name('update');
+        Route::delete('/destroy', [AdditionController::class, 'destroy'])->name('destroy');
+    });
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit'); //Breeze関係
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
