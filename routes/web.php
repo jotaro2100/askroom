@@ -30,14 +30,14 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/', [QueryController::class, 'index']) //質問一覧ページ
         ->name('queries.index');
-    Route::resource('queries', QueryController::class); //質問CRUD
-
     Route::get('/my_queries', [QueryController::class, 'myQueries']) //自分の質問ページ
         ->name('queries.my_queries');
     Route::get('/answered_queries', [AnswerController::class, 'index']) //回答した質問ページ
         ->name('answers.index');
     Route::get('/additions_queries', [AdditionController::class, 'index']) //補足した質問ページ
         ->name('additions.index');
+
+    Route::resource('queries', QueryController::class); //質問CRUD
 
     Route::post('/queries/{query}/answers', [AnswerController::class, 'store']) //回答C
         ->name('answers.store');
