@@ -9,7 +9,7 @@
             </div>
             @forelse ($queries as $query)
                 <div>
-                    <a href="{{ route('queries.show', $query) }}" class="block h-[200px] mb-6 p-6 bg-white border-[2px] border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-900 dark:border-gray-700 dark:hover:bg-gray-700">
+                    <a href="{{ route('queries.show', $query) }}" class="block h-[200px] mb-8 p-6 bg-white border-[2px] border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-900 dark:border-gray-700 dark:hover:bg-gray-700">
                         <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                             {{ $query->title }}
                         </h5>
