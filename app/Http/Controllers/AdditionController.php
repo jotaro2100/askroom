@@ -10,21 +10,33 @@ use Illuminate\Support\Facades\Auth;
 
 class AdditionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $additions = Auth::user()->additions;
-        $queries = array();
+        $search = $request->input('search');
+        $additions = Auth::user()->additions();
+        $answers = $additions->select('answers.*')
+            ->join('answers', 'answers.id', '=', 'additions.answer_id');
+        $queries = $answers->select('queries.*')
+            ->join('queries', 'queries.id', '=', 'answers.query_id')
+            ->distinct()
+            ->orderBy('updated_at', 'DESC');
 
-        foreach ($additions as $addition) {
-            $queries[] = $addition->answer->rootQuery;
-        };
+        if ($search) {
+            $queries->where(function ($query) use ($search) {
+                $query->where('queries.title', 'like', "%{$search}%")
+                    ->orWhere('queries.content', 'like', "%{$search}%");
+            });
+        }
 
-        $queries = array_unique($queries);
+        $queries = $queries->paginate(5);
 
         return view('queries.index')
             ->with([
                 'queries' => $queries,
                 'title' => '補足した質問',
+                'search' => $search,
+                'controller' => 'additions',
+                'method' => 'index',
             ]);
     }
 

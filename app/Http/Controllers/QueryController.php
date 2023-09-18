@@ -3,29 +3,58 @@
 namespace App\Http\Controllers;
 
 use App\Models\Query;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class QueryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $queries = Query::orderBy('updated_at', 'DESC');
+        $search = $request->input('search');
+        $query = Query::query();
+
+        if ($search) {
+            $query->where('title', 'like', "%{$search}%")
+                ->orWhere('content', 'like', "%{$search}%");
+            $queries = $query->orderBy('updated_at', 'DESC');
+        }
+
+        $queries = $queries->paginate(5);
 
         return view('queries.index')
             ->with([
                 'queries' => $queries,
-            'title' => '質問一覧',
+                'title' => '質問一覧',
+                'search' => $search,
+                'controller' => 'queries',
+                'method' => 'index',
             ]);
     }
 
-    public function myQueries()
+    public function myQueries(Request $request)
     {
-        $queries = Auth::user()->queries->sortByDesc('updated_at');
+        $search = $request->input('search');
+        $user = Auth::user();
+        $queries = $user->queries()->orderBy('updated_at', 'DESC');
+
+        if ($search) {
+            $queries->where(function ($query) use ($search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        $queries = $queries->orderBy('updated_at', 'DESC')->paginate(5);
 
         return view('queries.index')
             ->with([
                 'queries' => $queries,
-            'title' => '自分の質問',
+                'title' => '自分の質問',
+                'search' => $search,
+                'controller' => 'queries',
+                'method' => 'my_queries',
             ]);
     }
 

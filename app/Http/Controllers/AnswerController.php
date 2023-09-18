@@ -9,21 +9,31 @@ use Illuminate\Support\Facades\Auth;
 
 class AnswerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $answers = Auth::user()->answers;
-        $queries = array();
+        $search = $request->input('search');
+        $answers = Auth::user()->answers();
+        $queries = $answers->select('queries.*')
+            ->join('queries', 'queries.id', '=', 'answers.query_id')
+            ->distinct()
+            ->orderBy('updated_at', 'DESC');
 
-        foreach ($answers as $answer) {
-            $queries[] = $answer->rootQuery;
-        };
+        if ($search) {
+            $queries->where(function ($query) use ($search) {
+                $query->where('queries.title', 'like', "%{$search}%")
+                    ->orWhere('queries.content', 'like', "%{$search}%");
+            });
+        }
 
-        $queries = array_unique($queries);
+        $queries = $queries->paginate(5);
 
         return view('queries.index')
             ->with([
                 'queries' => $queries,
                 'title' => '回答した質問',
+                'search' => $search,
+                'controller' => 'answers',
+                'method' => 'index',
             ]);
     }
 
