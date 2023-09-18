@@ -10,24 +10,23 @@ class QueryController extends Controller
 {
     public function index()
     {
-        $queries = Query::latest()->get();
-        $title = [
-            'title' => '質問一覧',
-        ];
 
-        return view('queries.index', $title)
-            ->with(['queries' => $queries]);
+        return view('queries.index')
+            ->with([
+                'queries' => $queries,
+            'title' => '質問一覧',
+            ]);
     }
 
     public function myQueries()
     {
         $queries = Auth::user()->queries->sortByDesc('updated_at');
-        $title = [
-            'title' => '自分の質問',
-        ];
 
-        return view('queries.index', $title)
-            ->with(['queries' => $queries]);
+        return view('queries.index')
+            ->with([
+                'queries' => $queries,
+            'title' => '自分の質問',
+            ]);
     }
 
     public function show(Query $query)

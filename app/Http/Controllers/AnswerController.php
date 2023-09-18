@@ -19,12 +19,12 @@ class AnswerController extends Controller
         };
 
         $queries = array_unique($queries);
-        $title = [
-            'title' => '回答した質問',
-        ];
 
-        return view('queries.index', $title)
-            ->with(['queries' => $queries]);
+        return view('queries.index')
+            ->with([
+                'queries' => $queries,
+            'title' => '回答した質問',
+            ]);
     }
 
     public function store(Request $request, Query $query)
