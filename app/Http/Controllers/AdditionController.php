@@ -58,13 +58,11 @@ class AdditionController extends Controller
     public function update(Request $request, Query $query, $answer, Addition $addition)
     {
         $answer;
-        $editing = false;
         $addition->content = $request->content;
         $addition->save();
 
         return redirect()
-            ->route('queries.show', $query)
-            ->with(['editing' => $editing]);
+            ->route('queries.show', $query);
     }
 
     public function destroy(Query $query, $answer, Addition $addition)

@@ -56,13 +56,11 @@ class AnswerController extends Controller
 
     public function update(Request $request, Query $query, Answer $answer)
     {
-        $editing = false;
         $answer->content = $request->content;
         $answer->save();
 
         return redirect()
-            ->route('queries.show', $query)
-            ->with(['answer_editing' => $editing]);
+            ->route('queries.show', $query);
     }
 
     public function destroy(Query $query, Answer $answer)
