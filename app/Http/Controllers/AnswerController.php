@@ -23,7 +23,7 @@ class AnswerController extends Controller
         return view('queries.index')
             ->with([
                 'queries' => $queries,
-            'title' => '回答した質問',
+                'title' => '回答した質問',
             ]);
     }
 
@@ -51,6 +51,7 @@ class AnswerController extends Controller
                 'answer_editing' => $editing,
                 'addition_editing' => false,
                 'edit_answer_id' => $edit_answer_id,
+                'answer_id' => 0,
             ]);
     }
 

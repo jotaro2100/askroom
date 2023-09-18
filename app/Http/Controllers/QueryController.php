@@ -38,6 +38,7 @@ class QueryController extends Controller
                 'query' => $query,
                 'answer_editing' => $editing,
                 'addition_editing' => $editing,
+                'answer_id' => 0,
             ]);
     }
 

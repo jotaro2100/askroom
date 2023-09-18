@@ -68,6 +68,23 @@
                                 <p class="text-sm font-mono text-gray-700 dark:text-gray-300">
                                     更新日時： {{ $answer->updated_at }}
                                 </p>
+                                @endif
+                            </div>
+                        </div>
+                        <div>
+                            @if ($answer->user == Auth::user() && !$answer_editing && !$addition_editing)
+                                <div class="flex justify-end">
+                                    <div class="text-blue-500 mr-4">
+                                        <a href="{{ route('answers.edit', [$query, $answer]) }}" class="hover:underline">編集</a>
+                                    </div>
+                                    <div class="text-red-500">
+                                        <form onsubmit="return confirm('本当に削除しますか？')" action="{{ route('answers.destroy', [$query, $answer]) }}" method="post">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button class="hover:underline">削除</button>
+                                        </form>
+                                    </div>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -113,9 +130,25 @@
                     @else
                         <p class="mb-4 text-gray-700 dark:text-gray-300">{!! nl2br(e($answer->content)) !!}</p>
                     @endif
+
+                    @if ($answer->additions->count() == 0)
+                        @if (!$addition_editing)
+                        <div class="text-white text-center cursor-pointer text-xs leading-3 hover:text-blue-500 w-fit mx-auto mt-3" onclick="toggleAdditions({{ $answer->id }})">
+                            <p id="showAdditionsBtn_{{ $answer->id }}">補足を投稿する<br>&or;</p>
+                            <p id="hideAdditionsBtn_{{ $answer->id }}" style="display: none;">&and;<br>キャンセル</p>
+                        </div>
+                        @endif
+                    @else
+                        @if (!$addition_editing)
+                            <div class="text-white text-center cursor-pointer text-xs leading-3 hover:text-blue-500 w-fit mx-auto mt-6" onclick="toggleAdditions({{ $answer->id }})">
+                                <p id="showAdditionsBtn_{{ $answer->id }}">この回答の補足を見る<br>&or;</p>
+                                <p id="hideAdditionsBtn_{{ $answer->id }}" style="display: none;" class="mb-8">&and;<br>閉じる</p>
                 </div>
+                        @endif
+                    @endif
 
                 {{-- 補足一覧 --}}
+                    <div class="additions_{{ $answer->id }}" style="display: none;">
                 @foreach ($answer->additions as $addition)
                     <div class="flex justify-center">
                         <div class="p-6 w-11/12 bg-white border-[2px] border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -215,4 +248,38 @@
             </div>
         </div>
     </div>
+
+    <script>
+        'use strict';
+
+        function toggleAdditions(answerId) {
+            const showBtn = document.getElementById('showAdditionsBtn_' + answerId);
+            const hideBtn = document.getElementById('hideAdditionsBtn_' + answerId);
+
+            // 補足の表示および非表示を切り替える
+            const additions = document.querySelectorAll('.additions_' + answerId);
+            additions.forEach(function(addition) {
+                addition.style.display = (addition.style.display == 'none') ? 'block' : 'none';
+            });
+
+            // ボタンのテキストを切り替える
+            if (showBtn.style.display == 'none') {
+                showBtn.style.display = 'block';
+                hideBtn.style.display = 'none';
+            } else {
+                showBtn.style.display = 'none';
+                hideBtn.style.display = 'block';
+            }
+        }
+
+        function editAddtion() {
+            const editingAddition = document.querySelector('.additions_' + <?= $answer_id ?>);
+
+            if (editingAddition !== null) {
+                editingAddition.style.display = 'block';
+            }
+        }
+
+        editAddtion();
+    </script>
 </x-app-layout>

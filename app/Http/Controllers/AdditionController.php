@@ -24,7 +24,7 @@ class AdditionController extends Controller
         return view('queries.index')
             ->with([
                 'queries' => $queries,
-            'title' => '補足した質問',
+                'title' => '補足した質問',
             ]);
     }
 
@@ -44,6 +44,7 @@ class AdditionController extends Controller
     {
         $addition_editing = true;
         $edit_addition_id = $addition->id;
+        $answer_id = $addition->answer->id;
 
         return view('queries.show')
             ->with([
@@ -52,6 +53,7 @@ class AdditionController extends Controller
                 'answer_editing' => false,
                 'addition_editing' => $addition_editing,
                 'edit_addition_id' => $edit_addition_id,
+                'answer_id' => $answer_id,
             ]);
     }
 
