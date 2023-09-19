@@ -102,6 +102,16 @@
                 </div>
 
                 <div class="mt-3 space-y-1">
+                    <x-responsive-nav-link :href="route('queries.my_queries')">
+                        自分の質問
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('answers.index')">
+                        回答した質問
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('additions.index')">
+                        補足した質問
+                    </x-responsive-nav-link>
+
                     <x-responsive-nav-link :href="route('profile.edit')">
                         {{ __('Profile') }}
                     </x-responsive-nav-link>

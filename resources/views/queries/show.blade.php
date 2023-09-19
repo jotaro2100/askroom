@@ -28,17 +28,17 @@
             {{-- 質問本文 --}}
             <div class="block min-h-[400px] p-6 bg-white border-[2px] border-gray-200 rounded-lg shadow-md dark:bg-slate-900 dark:border-gray-700">
                 <h2 class="mb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $query->title }}</h2>
-                <div class="flex justify-between mb-6">
-                    <div class="">
+                <div class="flex flex-col justify-between mb-6 md:flex-row">
+                    <div class="mb-1">
                         <p class="font-bold text-gray-700 dark:text-gray-300">
                             投稿者： {{ $query->user->name }}
                         </p>
                     </div>
                     <div>
-                        <p class="text-sm font-mono text-gray-700 dark:text-gray-300">
+                        <p class="text-sm font-mono text-gray-700 dark:text-gray-400">
                             作成日時： {{ $query->created_at }}
                         </p>
-                        <p class="text-sm font-mono text-gray-700 dark:text-gray-300">
+                        <p class="text-sm font-mono text-gray-700 dark:text-gray-400">
                             更新日時： {{ $query->updated_at }}
                         </p>
                     </div>
@@ -145,20 +145,38 @@
                         @foreach ($answer->additions as $addition)
                             <div class="mt-6">
                                 <div class="bg-white rounded-lg shadow-md p-4 dark:bg-slate-700">
-                                    <div class="flex justify-between mb-2">
-                                        <div>
-                                            <p class="font-bold text-gray-700 dark:text-gray-300">
-                                                補足者: {{ $addition->user->name }}
-                                            </p>
+                                    <div class="flex justify-between mb-4">
+                                        <div class="flex flex-col justify-between">
+                                            <div class="mb-1">
+                                                <p class="font-bold text-gray-700 dark:text-gray-300">
+                                                    補足者: {{ $addition->user->name }}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p class="text-xs font-mono text-gray-700 dark:text-gray-400">
+                                                    投稿日時: {{ $addition->created_at }}
+                                                </p>
+                                                @if ($addition->created_at != $addition->updated_at)
+                                                    <p class="text-xs font-mono text-gray-700 dark:text-gray-400">
+                                                        更新日時: {{ $addition->updated_at }}
+                                                    </p>
+                                                @endif
+                                            </div>
                                         </div>
                                         <div>
-                                            <p class="text-sm font-mono text-gray-700 dark:text-gray-300">
-                                                投稿日時: {{ $addition->created_at }}
-                                            </p>
-                                            @if ($addition->created_at != $addition->updated_at)
-                                                <p class="text-sm font-mono text-gray-700 dark:text-gray-300">
-                                                    更新日時: {{ $addition->updated_at }}
-                                                </p>
+                                            @if ($addition->user == Auth::user() && !$answer_editing && !$addition_editing)
+                                                <div class="flex justify-end">
+                                                    <div class="text-blue-500 mr-4">
+                                                        <a href="{{ route('additions.edit', [$query, $answer, $addition]) }}" class="hover:underline">編集</a>
+                                                    </div>
+                                                    <div class="text-red-500">
+                                                        <form onsubmit="return confirm('本当に削除しますか？')" action="{{ route('additions.destroy', [$query, $answer, $addition]) }}" method="post">
+                                                            @method('DELETE')
+                                                            @csrf
+                                                            <button class="hover:underline">削除</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             @endif
                                         </div>
                                     </div>
@@ -188,18 +206,6 @@
                                         @else
                                             {{-- 通常時 --}}
                                             <p class="mb-4 text-gray-700 dark:text-gray-300 break-words">{!! nl2br(e($addition->content)) !!}</p>
-                                            <div class="flex justify-end">
-                                                <div class="text-blue-500 mr-4">
-                                                    <a href="{{ route('additions.edit', [$query, $answer, $addition]) }}" class="hover:underline">編集</a>
-                                                </div>
-                                                <div class="text-red-500">
-                                                    <form onsubmit="return confirm('本当に削除しますか？')" action="{{ route('additions.destroy', [$query, $answer, $addition]) }}" method="post">
-                                                        @method('DELETE')
-                                                        @csrf
-                                                        <button class="hover:underline">削除</button>
-                                                    </form>
-                                                </div>
-                                            </div>
                                         @endif
                                     @else
                                         <p class="mb-4 text-gray-700 dark:text-gray-300 break-words">{!! nl2br(e($addition->content)) !!}</p>
@@ -227,7 +233,7 @@
             @endforeach
 
             {{-- 回答の新規投稿フォーム --}}
-            <div class="block px-8 py-6 bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="block px-4 py-6 bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 md:px-8">
                 <form id="answer-form" action="{{ route('answers.store', $query) }}" method="post">
                     @csrf
 
