@@ -222,7 +222,7 @@
                                 <div class="text-center mb-4">
                                     <x-input-label for="content"><p class="text-lg font-bold">補足の投稿</p></x-input-label>
                                 </div>
-                                <x-text-area id="content" class="w-full h-32 dark:!bg-gray-900" type="text" name="content" required></x-text-area>
+                                <x-text-area id="content" class="w-full !h-32 dark:!bg-gray-900" type="text" name="content" required></x-text-area>
                                 <button class="mt-2 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-xs px-2 py-2 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                     補足を投稿する
                                 </button>
