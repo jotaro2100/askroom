@@ -23,10 +23,6 @@ Route::model('query', Query::class);
 Route::model('answer', Answer::class);
 Route::model('addition', Addition::class);
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::middleware('auth')->group(function () {
     Route::get('/', [QueryController::class, 'index']) //質問一覧ページ
         ->name('queries.index');
