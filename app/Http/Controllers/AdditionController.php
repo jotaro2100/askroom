@@ -87,7 +87,6 @@ class AdditionController extends Controller
             "addition_content{$answer->id}.max" => "補足は :max 文字以下で入力してください",
         ]);
 
-        $answer;
         $addition->content = $request->input("addition_content"."{$answer->id}");
         $addition->save();
 
