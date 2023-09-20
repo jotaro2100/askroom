@@ -35,7 +35,7 @@
             @forelse ($queries as $query)
                 <div>
                     <a href="{{ route('queries.show', $query) }}" class="block !h-[224px] mb-4 px-6 py-4 bg-white border-[2px] border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-slate-900 dark:border-gray-700 dark:hover:bg-gray-700">
-                        <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                        <h5 class="max-h-[28px] mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white overflow-hidden">
                             {{ $query->title }}
                         </h5>
                         <p class="mb-2 font-bold text-gray-700 dark:text-gray-300">
