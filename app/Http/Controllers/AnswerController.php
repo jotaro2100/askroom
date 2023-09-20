@@ -7,7 +7,6 @@ use App\Models\Query;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\AnswerRequest;
-use Illuminate\Support\Facades\Log;
 
 class AnswerController extends Controller
 {
