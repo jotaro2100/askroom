@@ -1,4 +1,8 @@
 <x-app-layout>
+    <x-slot name="title">
+        {{ $query->title }}
+    </x-slot>
+
     <div class="py-12">
         <div class="px-2 max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6">
             {{-- トップメニュー --}}
@@ -38,9 +42,11 @@
                         <p class="text-sm font-mono text-gray-700 dark:text-gray-400">
                             作成日時： {{ $query->created_at }}
                         </p>
-                        <p class="text-sm font-mono text-gray-700 dark:text-gray-400">
-                            更新日時： {{ $query->updated_at }}
-                        </p>
+                        @if ($query->created_at != $query->updated_at)
+                            <p class="text-sm font-mono text-gray-700 dark:text-gray-400">
+                                更新日時： {{ $query->updated_at }}
+                            </p>
+                        @endif
                     </div>
                 </div>
                 <p class="font-normal text-gray-100 dark:text-gray-100">

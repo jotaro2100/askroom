@@ -1,4 +1,8 @@
 <x-app-layout>
+    <x-slot name="title">
+        質問を編集
+    </x-slot>
+
     <div class="py-12">
         <div class="p-2 max-w-3xl mx-auto sm:px-6 lg:px-8 space-y-4">
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
