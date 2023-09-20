@@ -106,7 +106,10 @@
                                 @csrf
                                 @method('PATCH')
 
-                                <x-text-area id="content" class="w-full !min-h-[200px] dark:!bg-gray-900" type="text" name="content" autofocus required>{{ old('content', $answer->content) }}</x-text-area>
+                                <x-input-error :messages="$errors->get('answer_content')" class="mt-2" />
+                                <x-text-area id="answer_content" class="mt-1 w-full !min-h-[200px] dark:!bg-gray-900" type="text" name="answer_content" autofocus required>
+                                    {{ old('answer_content', $answer->content) }}
+                                </x-text-area>
                                 <div class="flex justify-end items-center mt-4">
                                     <div class="text-blue-500 mr-4">
                                         <button type="submit" class="hover:underline">更新</button>
@@ -131,14 +134,14 @@
                     @endif
 
                     @if ($answer->additions->isEmpty())
-                        @if (!$addition_editing)
-                        <div class="text-white text-center cursor-pointer text-xs leading-3 hover:text-blue-500 w-fit mx-auto mt-3" onclick="toggleAdditions({{ $answer->id }})">
-                            <p id="showAdditionsBtn_{{ $answer->id }}">補足を投稿する<br>&or;</p>
-                            <p id="hideAdditionsBtn_{{ $answer->id }}" style="display: none;">&and;<br>キャンセル</p>
-                        </div>
+                        @if (!$addition_editing && !$answer_editing)
+                            <div class="text-white text-center cursor-pointer text-xs leading-3 hover:text-blue-500 w-fit mx-auto mt-3" onclick="toggleAdditions({{ $answer->id }})">
+                                <p id="showAdditionsBtn_{{ $answer->id }}">補足を投稿する<br>&or;</p>
+                                <p id="hideAdditionsBtn_{{ $answer->id }}" style="display: none;">&and;<br>キャンセル</p>
+                            </div>
                         @endif
                     @else
-                        @if (!$addition_editing)
+                        @if (!$addition_editing && !$answer_editing)
                             <div class="text-white text-center cursor-pointer text-xs leading-3 hover:text-blue-500 w-fit mx-auto mt-6" onclick="toggleAdditions({{ $answer->id }})">
                                 <p id="showAdditionsBtn_{{ $answer->id }}">この回答の補足を見る<br>&or;</p>
                                 <p id="hideAdditionsBtn_{{ $answer->id }}" style="display: none;" class="mb-8">&and;<br>閉じる</p>
@@ -196,7 +199,10 @@
                                                     @csrf
                                                     @method('PATCH')
 
-                                                    <x-text-area id="content" class="w-full !h-[200px] dark:!bg-gray-900" type="text" name="content" autofocus required>{{ old('content', $addition->content) }}</x-text-area>
+                                                    <x-input-error :messages="$errors->get('addition_content' . $answer->id)" class="mt-2" />
+                                                    <x-text-area id="addition_content{{ $answer->id }}" class="mt-1 w-full !h-[200px] dark:!bg-gray-900" type="text" name="addition_content{{ $answer->id }}" autofocus required>
+                                                        {{ old('addition_content' . $answer->id, $addition->content) }}
+                                                    </x-text-area>
                                                     <div class="flex justify-end items-center mt-4">
                                                         <div class="text-blue-500 mr-4">
                                                             <button type="submit" class="hover:underline">更新</button>
@@ -221,42 +227,63 @@
                         @endforeach
 
                         {{-- 補足の新規投稿フォーム --}}
-                        <div class="mt-8">
-                            <form action="{{ route('additions.store', [$query, $answer]) }}" method="post">
-                                @csrf
+                        @if (!$addition_editing)
+                            <div class="mt-8">
+                                <form action="{{ route('additions.store', [$query, $answer]) }}" method="post">
+                                    @csrf
 
-                                <div class="text-center mb-4">
-                                    <x-input-label for="content"><p class="text-lg font-bold">補足の投稿</p></x-input-label>
-                                </div>
-                                <x-text-area id="content" class="w-full !h-32 dark:!bg-gray-900" type="text" name="content" required></x-text-area>
-                                <button class="mt-2 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-xs px-2 py-2 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                                    補足を投稿する
-                                </button>
-                            </form>
-                        </div>
+                                    <div class="text-center mb-4">
+                                        <x-input-label for="addition_content{{ $answer->id }}"><p class="text-lg font-bold">補足の投稿</p></x-input-label>
+                                    </div>
+                                    <x-input-error :messages="$errors->get('addition_content' . $answer->id)" class="mt-2" />
+                                    <x-text-area id="addition_content{{ $answer->id }}" class="mt-1 w-full !h-32 dark:!bg-gray-900" type="text" name="addition_content{{ $answer->id }}" required>
+                                        {{ old('addition_content' . $answer->id) }}
+                                    </x-text-area>
+                                    <button class="mt-2 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-xs px-2 py-2 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                        補足を投稿する
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @endforeach
 
             {{-- 回答の新規投稿フォーム --}}
-            <div class="block px-4 py-6 bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 md:px-8">
-                <form id="answer-form" action="{{ route('answers.store', $query) }}" method="post">
-                    @csrf
+            @if (!$answer_editing && !$addition_editing)
+                <div class="block px-4 py-6 bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 md:px-8">
+                    <form id="answer-form" action="{{ route('answers.store', $query) }}" method="post">
+                        @csrf
 
-                    <div class="text-center mb-4">
-                        <x-input-label for="content"><p class="text-xl font-bold">新しい回答の投稿</p></x-input-label>
-                    </div>
-                    <x-text-area id="content" class="mt-1 w-full !h-[300px] dark:!bg-gray-900" type="text" name="content" required/>
-                    <button class="mt-4 w-full font-bold text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5 py-3 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                        回答を投稿する
-                    </button>
-                </form>
-            </div>
+                        <div class="text-center mb-4">
+                            <x-input-label for="answer_content"><p class="text-xl font-bold">新しい回答の投稿</p></x-input-label>
+                        </div>
+                        <x-input-error :messages="$errors->get('answer_content')" class="error mt-2" />
+                        <x-text-area id="answer_content" class="mt-1 w-full !h-[300px] dark:!bg-gray-900" type="text" name="answer_content" required>
+                            {{ old('answer_content') }}
+                        </x-text-area>
+                        <button type="submit" class="mt-4 w-full font-bold text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5 py-3 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                            回答を投稿する
+                        </button>
+                    </form>
+                </div>
+            @endif
         </div>
     </div>
 
     <script>
         'use strict';
+
+        const targetElement = document.querySelector('.error');
+
+        if (targetElement) {
+            const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+
+            window.scrollTo({
+                top: elementPosition,
+                behavior: 'smooth'
+            });
+        }
 
         function toggleAdditions(answerId) {
             const showBtn = document.getElementById('showAdditionsBtn_' + answerId);

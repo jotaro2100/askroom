@@ -42,10 +42,18 @@ class AdditionController extends Controller
 
     public function store(Request $request, Query $query, Answer $answer)
     {
+        $request->validate([
+            "addition_content{$answer->id}" => 'required|min:5|max:300',
+        ], [
+            "addition_content{$answer->id}.required" => "補足を入力してください",
+            "addition_content{$answer->id}.min" => "補足は :min 文字以上で入力してください",
+            "addition_content{$answer->id}.max" => "補足は :max 文字以下で入力してください",
+        ]);
+
         $addition = new Addition();
         $addition->user_id = Auth::id();
         $addition->answer_id = $answer->id;
-        $addition->content = $request->content;
+        $addition->content = $request->input("addition_content"."{$answer->id}");
         $addition->save();
 
         return redirect()
@@ -71,8 +79,16 @@ class AdditionController extends Controller
 
     public function update(Request $request, Query $query, $answer, Addition $addition)
     {
+        $request->validate([
+            "addition_content{$answer->id}" => 'required|min:5|max:300',
+        ], [
+            "addition_content{$answer->id}.required" => "補足を入力してください",
+            "addition_content{$answer->id}.min" => "補足は :min 文字以上で入力してください",
+            "addition_content{$answer->id}.max" => "補足は :max 文字以下で入力してください",
+        ]);
+
         $answer;
-        $addition->content = $request->content;
+        $addition->content = $request->input("addition_content"."{$answer->id}");
         $addition->save();
 
         return redirect()

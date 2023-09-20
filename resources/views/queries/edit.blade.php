@@ -13,10 +13,12 @@
 
                     <div class="mb-4">
                         <x-input-label for="title">題名</x-input-label>
+                        <x-input-error :messages="$errors->get('title')" class="mt-2" />
                         <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" value="{{ old('title', $query->title) }}" required/>
                     </div>
                     <div>
                         <x-input-label for="content">本文</x-input-label>
+                        <x-input-error :messages="$errors->get('content')" class="mt-2" />
                         <x-text-area id="content" class="block mt-1 w-full min-h-max dark:!bg-gray-900" type="text" name="content" required>{{ old('content', $query->content) }}</x-text-area>
                     </div>
                     <div>

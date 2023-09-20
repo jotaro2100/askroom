@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Query;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\QueryRequest;
 
 class QueryController extends Controller
 {
@@ -76,7 +76,7 @@ class QueryController extends Controller
         return view('queries.create');
     }
 
-    public function store(Request $request)
+    public function store(QueryRequest $request)
     {
         $query = new Query();
         $query->user_id = Auth::id();
@@ -94,7 +94,7 @@ class QueryController extends Controller
             ->with(['query' => $query]);
     }
 
-    public function update(Request $request, Query $query)
+    public function update(QueryRequest $request, Query $query)
     {
         $query->title = $request->title;
         $query->content = $request->content;
