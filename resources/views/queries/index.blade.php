@@ -28,6 +28,9 @@
                         </div>
                     </form>
                 </div>
+                <div>
+                    {{ $queries->appends(request()->input())->links() }}
+                </div>
             </div>
             @forelse ($queries as $query)
                 <div>
