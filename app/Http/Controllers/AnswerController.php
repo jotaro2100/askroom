@@ -6,6 +6,7 @@ use App\Models\Answer;
 use App\Models\Query;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\AnswerRequest;
 
 class AnswerController extends Controller
 {
@@ -37,12 +38,12 @@ class AnswerController extends Controller
             ]);
     }
 
-    public function store(Request $request, Query $query)
+    public function store(AnswerRequest $request, Query $query)
     {
         $answer = new Answer();
         $answer->user_id = Auth::id();
         $answer->query_id = $query->id;
-        $answer->content = $request->content;
+        $answer->content = $request->input('answer_content');
         $answer->save();
 
         return redirect()
@@ -65,9 +66,9 @@ class AnswerController extends Controller
             ]);
     }
 
-    public function update(Request $request, Query $query, Answer $answer)
+    public function update(AnswerRequest $request, Query $query, Answer $answer)
     {
-        $answer->content = $request->content;
+        $answer->content = $request->input('answer_content');
         $answer->save();
 
         return redirect()

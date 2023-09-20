@@ -1,4 +1,8 @@
 <x-app-layout>
+    <x-slot name="title">
+        質問を編集
+    </x-slot>
+
     <div class="py-12">
         <div class="p-2 max-w-3xl mx-auto sm:px-6 lg:px-8 space-y-4">
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
@@ -9,10 +13,12 @@
 
                     <div class="mb-4">
                         <x-input-label for="title">題名</x-input-label>
+                        <x-input-error :messages="$errors->get('title')" class="mt-2" />
                         <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" value="{{ old('title', $query->title) }}" required/>
                     </div>
                     <div>
                         <x-input-label for="content">本文</x-input-label>
+                        <x-input-error :messages="$errors->get('content')" class="mt-2" />
                         <x-text-area id="content" class="block mt-1 w-full min-h-max dark:!bg-gray-900" type="text" name="content" required>{{ old('content', $query->content) }}</x-text-area>
                     </div>
                     <div>
