@@ -23,7 +23,7 @@
                             投稿する
                         </button>
                         <div class="text-center mt-2">
-                            <a href="{{ url()->previous() }}" class="text-red-600 font-bold">
+                            <a href="{{ route('queries.index') }}" class="text-red-600 font-bold">
                                 キャンセル
                             </a>
                         </div>
