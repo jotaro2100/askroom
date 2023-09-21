@@ -36,6 +36,7 @@
 
             <!-- Page Content -->
             <main class="min-h-screen pt-[65px] pb-[57px]">
+                @include('components.flash-message')
                 {{ $slot }}
             </main>
 
@@ -43,5 +44,7 @@
                 @include('layouts.footer')
             </div>
         </div>
+
+        <script src="{{ asset('js/flash-message.js') }}"></script>
     </body>
 </html>

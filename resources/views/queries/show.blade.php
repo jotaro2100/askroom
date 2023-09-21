@@ -235,7 +235,7 @@
                                     <div class="text-center mb-4">
                                         <x-input-label for="addition_content{{ $answer->id }}"><p class="text-lg font-bold">補足の投稿</p></x-input-label>
                                     </div>
-                                    <x-input-error :messages="$errors->get('addition_content' . $answer->id)" class="mt-2" />
+                                    <x-input-error :messages="$errors->get('addition_content' . $answer->id)" class="error mt-2" />
                                     <x-text-area id="addition_content{{ $answer->id }}" class="mt-1 w-full !h-32 dark:!bg-gray-900" type="text" name="addition_content{{ $answer->id }}" required>
                                         {{ old('addition_content' . $answer->id) }}
                                     </x-text-area>
@@ -271,20 +271,14 @@
         </div>
     </div>
 
+    @php
+        $ansId = session('ansid');
+    @endphp
+
     <script>
         'use strict';
 
-        const targetElement = document.querySelector('.error');
-
-        if (targetElement) {
-            const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
-
-            window.scrollTo({
-                top: elementPosition,
-                behavior: 'smooth'
-            });
-        }
-
+        // 補足表示トグル
         function toggleAdditions(answerId) {
             const showBtn = document.getElementById('showAdditionsBtn_' + answerId);
             const hideBtn = document.getElementById('hideAdditionsBtn_' + answerId);
@@ -305,6 +299,7 @@
             }
         }
 
+        // 補足編集時に該当の補足フォームを開いたままにする
         function editAddtion() {
             const editingAddition = document.querySelector('.additions_' + <?= $answer_id ?>);
 
@@ -314,5 +309,29 @@
         }
 
         editAddtion();
+    </script>
+
+    // 新規補足のバリデーションエラー時に該当のフォームを展開
+    @if (!is_null($ansId))
+        <script>
+            let ansId = {{ $ansId }};
+            let expandBtn = document.getElementById('showAdditionsBtn_' + ansId);
+
+            expandBtn.click();
+        </script>
+    @endif
+
+    <script>
+        // バリデーションエラー時に該当のフォームまで自動でスクロールする
+        const targetElement = document.querySelector('.error');
+
+        if (targetElement) {
+            const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - 300;
+
+            window.scrollTo({
+                top: elementPosition,
+                behavior: 'smooth'
+            });
+        }
     </script>
 </x-app-layout>

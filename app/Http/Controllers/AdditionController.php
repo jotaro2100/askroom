@@ -7,6 +7,7 @@ use App\Models\Answer;
 use App\Models\Addition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AdditionController extends Controller
 {
@@ -42,13 +43,25 @@ class AdditionController extends Controller
 
     public function store(Request $request, Query $query, Answer $answer)
     {
-        $request->validate([
+        $rules = [
             "addition_content{$answer->id}" => 'required|min:5|max:300',
-        ], [
+        ];
+
+        $messages = [
             "addition_content{$answer->id}.required" => "補足を入力してください",
             "addition_content{$answer->id}.min" => "補足は :min 文字以上で入力してください",
             "addition_content{$answer->id}.max" => "補足は :max 文字以下で入力してください",
-        ]);
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        // バリデーションエラー時に該当のフォームの$answer->idを返却
+        if ($validator->fails())
+        {
+            return redirect()->back()->with([
+                'ansid' => $request->answer->id,
+            ])->withErrors($validator)->withInput();
+        }
 
         $addition = new Addition();
         $addition->user_id = Auth::id();
@@ -57,7 +70,8 @@ class AdditionController extends Controller
         $addition->save();
 
         return redirect()
-            ->route('queries.show', $query);
+            ->route('queries.show', $query)
+            ->with('flash_message', '補足を投稿しました');
     }
 
     public function edit(Query $query, Answer $answer, Addition $addition)
@@ -91,7 +105,8 @@ class AdditionController extends Controller
         $addition->save();
 
         return redirect()
-            ->route('queries.show', $query);
+            ->route('queries.show', $query)
+            ->with('flash_message', '補足を更新しました');
     }
 
     public function destroy(Query $query, $answer, Addition $addition)
@@ -100,6 +115,7 @@ class AdditionController extends Controller
         $addition->delete();
 
         return redirect()
-            ->route('queries.show', $query);
+            ->route('queries.show', $query)
+            ->with('flash_message', '補足を削除しました');
     }
 }
