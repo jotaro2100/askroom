@@ -135,7 +135,7 @@
 
                     @if ($answer->additions->isEmpty())
                         @if (!$addition_editing && !$answer_editing)
-                            <div class="text-white text-center cursor-pointer text-xs leading-3 hover:text-blue-500 w-fit mx-auto mt-3" onclick="toggleAdditions({{ $answer->id }})">
+                            <div class="text-white text-center cursor-pointer text-xs leading-3 hover:text-blue-500 w-fit mx-auto mt-6" onclick="toggleAdditions({{ $answer->id }})">
                                 <p id="showAdditionsBtn_{{ $answer->id }}">補足を投稿する<br>&or;</p>
                                 <p id="hideAdditionsBtn_{{ $answer->id }}" style="display: none;">&and;<br>キャンセル</p>
                             </div>
