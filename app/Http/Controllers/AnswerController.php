@@ -47,7 +47,8 @@ class AnswerController extends Controller
         $answer->save();
 
         return redirect()
-            ->route('queries.show', $query);
+            ->route('queries.show', $query)
+            ->with('flash_message', '回答を投稿しました');
     }
 
     public function edit(Query $query, Answer $answer)
@@ -72,7 +73,8 @@ class AnswerController extends Controller
         $answer->save();
 
         return redirect()
-            ->route('queries.show', $query);
+            ->route('queries.show', $query)
+            ->with('flash_message', '回答を更新しました');
     }
 
     public function destroy(Query $query, Answer $answer)
@@ -80,6 +82,7 @@ class AnswerController extends Controller
         $answer->delete();
 
         return redirect()
-            ->route('queries.show', $query);
+            ->route('queries.show', $query)
+            ->with('flash_message', '回答を削除しました');
     }
 }

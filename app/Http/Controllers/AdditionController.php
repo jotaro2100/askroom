@@ -57,7 +57,8 @@ class AdditionController extends Controller
         $addition->save();
 
         return redirect()
-            ->route('queries.show', $query);
+            ->route('queries.show', $query)
+            ->with('flash_message', '補足を投稿しました');
     }
 
     public function edit(Query $query, Answer $answer, Addition $addition)
@@ -91,7 +92,8 @@ class AdditionController extends Controller
         $addition->save();
 
         return redirect()
-            ->route('queries.show', $query);
+            ->route('queries.show', $query)
+            ->with('flash_message', '補足を更新しました');
     }
 
     public function destroy(Query $query, $answer, Addition $addition)
@@ -100,6 +102,7 @@ class AdditionController extends Controller
         $addition->delete();
 
         return redirect()
-            ->route('queries.show', $query);
+            ->route('queries.show', $query)
+            ->with('flash_message', '補足を削除しました');
     }
 }

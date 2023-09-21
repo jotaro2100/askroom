@@ -85,7 +85,8 @@ class QueryController extends Controller
         $query->save();
 
         return redirect()
-            ->route('queries.index');
+            ->route('queries.index')
+            ->with('flash_message', '質問を投稿しました');
     }
 
     public function edit(Query $query)
@@ -101,7 +102,8 @@ class QueryController extends Controller
         $query->save();
 
         return redirect()
-            ->route('queries.show', $query);
+            ->route('queries.show', $query)
+            ->with('flash_message', '質問を更新しました');
     }
 
     public function destroy(Query $query)
@@ -109,6 +111,7 @@ class QueryController extends Controller
         $query->delete();
 
         return redirect()
-            ->route('queries.index');
+            ->route('queries.index')
+            ->with('flash_message', '質問を削除しました');
     }
 }
