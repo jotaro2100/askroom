@@ -311,9 +311,9 @@
         editAddtion();
     </script>
 
-    // 新規補足のバリデーションエラー時に該当のフォームを展開
     @if (!is_null($ansId))
         <script>
+            // 新規補足のバリデーションエラー時に該当のフォームを展開
             let ansId = {{ $ansId }};
             let expandBtn = document.getElementById('showAdditionsBtn_' + ansId);
 
