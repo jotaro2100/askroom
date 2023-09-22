@@ -12,4 +12,4 @@
 
 以下のリンクからデモページにアクセスできます。
 
-AmazonEC2：[Q&Aコミュニティアプリ](http://ec2-54-238-246-183.ap-northeast-1.compute.amazonaws.com/)
+AmazonEC2：[【Askroom】Q&Aコミュニティアプリ](http://ec2-54-238-246-183.ap-northeast-1.compute.amazonaws.com/)
