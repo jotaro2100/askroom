@@ -53,6 +53,8 @@ class AnswerController extends Controller
 
     public function edit(Query $query, Answer $answer)
     {
+        $this->authorize('update', $answer);
+
         $editing = true;
         $edit_answer_id = $answer->id;
 
@@ -69,6 +71,8 @@ class AnswerController extends Controller
 
     public function update(AnswerRequest $request, Query $query, Answer $answer)
     {
+        $this->authorize('update', $answer);
+
         $answer->content = $request->input('answer_content');
         $answer->save();
 
@@ -79,6 +83,8 @@ class AnswerController extends Controller
 
     public function destroy(Query $query, Answer $answer)
     {
+        $this->authorize('delete', $answer);
+
         $answer->delete();
 
         return redirect()

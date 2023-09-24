@@ -76,6 +76,8 @@ class AdditionController extends Controller
 
     public function edit(Query $query, Answer $answer, Addition $addition)
     {
+        $this->authorize('update', $addition);
+
         $addition_editing = true;
         $edit_addition_id = $addition->id;
         $answer_id = $addition->answer->id;
@@ -93,6 +95,8 @@ class AdditionController extends Controller
 
     public function update(Request $request, Query $query, $answer, Addition $addition)
     {
+        $this->authorize('update', $addition);
+
         $request->validate([
             "addition_content{$answer->id}" => 'required|min:5|max:300',
         ], [
@@ -111,6 +115,8 @@ class AdditionController extends Controller
 
     public function destroy(Query $query, $answer, Addition $addition)
     {
+        $this->authorize('delete', $addition);
+
         $answer;
         $addition->delete();
 
