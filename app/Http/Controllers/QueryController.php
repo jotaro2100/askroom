@@ -91,12 +91,16 @@ class QueryController extends Controller
 
     public function edit(Query $query)
     {
+        $this->authorize('update', $query);
+
         return view('queries.edit')
             ->with(['query' => $query]);
     }
 
     public function update(QueryRequest $request, Query $query)
     {
+        $this->authorize('update', $query);
+
         $query->title = $request->title;
         $query->content = $request->content;
         $query->save();
@@ -108,6 +112,8 @@ class QueryController extends Controller
 
     public function destroy(Query $query)
     {
+        $this->authorize('delete', $query);
+
         $query->delete();
 
         return redirect()
