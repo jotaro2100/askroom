@@ -9,6 +9,22 @@ use App\Http\Requests\QueryRequest;
 
 class QueryController extends Controller
 {
+    private function getQueriesByResolveStatus(Request $request, $resolveStatus)
+    {
+        $search = $request->input('search');
+        $queryBuilder = Query::where('resolve', $resolveStatus)
+            ->orderBy('updated_at', 'DESC');
+
+        if ($search) {
+            $queryBuilder->where(function ($query) use ($search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        return $queryBuilder->orderBy('updated_at', 'DESC')->paginate(5);
+    }
+
     public function index(Request $request)
     {
         $queries = Query::orderBy('updated_at', 'DESC');
@@ -55,6 +71,34 @@ class QueryController extends Controller
                 'search' => $search,
                 'controller' => 'queries',
                 'method' => 'my_queries',
+            ]);
+    }
+
+    public function resolvedQueries(Request $request)
+    {
+        $queries = $this->getQueriesByResolveStatus($request, 1);
+
+        return view('queries.index')
+            ->with([
+                'queries' => $queries,
+                'title' => '解決済の質問',
+                'search' => $request->input('search'),
+                'controller' => 'queries',
+                'method' => 'resolved_queries',
+            ]);
+    }
+
+    public function unresolvedQueries(Request $request)
+    {
+        $queries = $this->getQueriesByResolveStatus($request, 0);
+
+        return view('queries.index')
+            ->with([
+                'queries' => $queries,
+                'title' => '未解決の質問',
+                'search' => $request->input('search'),
+                'controller' => 'queries',
+                'method' => 'unresolved_queries',
             ]);
     }
 
