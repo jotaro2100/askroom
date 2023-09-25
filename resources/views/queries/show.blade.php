@@ -32,21 +32,39 @@
             {{-- 質問本文 --}}
             <div class="block min-h-[400px] p-6 bg-white border-[2px] border-gray-200 rounded-lg shadow-md dark:bg-slate-900 dark:border-gray-700">
                 <h2 class="mb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $query->title }}</h2>
-                <div class="flex flex-col justify-between mb-6 md:flex-row">
-                    <div class="mb-1">
-                        <p class="font-bold text-gray-700 dark:text-gray-300">
+                <div class="flex justify-between mb-4 md:flex-row">
+                    <div>
+                        <p class="font-bold text-gray-700 dark:text-gray-300 mb-1">
                             投稿者： {{ $query->user->name }}
                         </p>
-                    </div>
-                    <div>
-                        <p class="text-sm font-mono text-gray-700 dark:text-gray-400">
-                            作成日時： {{ $query->created_at }}
-                        </p>
-                        @if ($query->created_at != $query->updated_at)
+                        <div>
                             <p class="text-sm font-mono text-gray-700 dark:text-gray-400">
-                                更新日時： {{ $query->updated_at }}
+                                投稿： {{ $query->created_at }}
                             </p>
-                        @endif
+                            @if ($query->created_at != $query->updated_at)
+                                <p class="text-sm font-mono text-gray-700 dark:text-gray-400">
+                                    更新： {{ $query->updated_at }}
+                                </p>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="mb-3">
+                            @if ($query->resolve)
+                                <p class="text-green-500 font-bold border border-green-500 px-2 py-1 rounded-md">解決済</p>
+                            @else
+                                <p class="text-orange-500 font-bold border border-orange-500 px-2 py-1 rounded-md">未解決</p>
+                            @endif
+                        </div>
+                        @can('update', $query)
+                            <div class="text-sm text-blue-500 hover:underline">
+                                @if ($query->resolve)
+                                    <a href="{{ route('queries.resolve', $query) }}">未解決にする</a>
+                                @else
+                                    <a href="{{ route('queries.resolve', $query) }}">解決済にする</a>
+                                @endif
+                            </div>
+                        @endcan
                     </div>
                 </div>
                 <p class="font-normal text-gray-100 dark:text-gray-100">
@@ -70,11 +88,11 @@
                             </div>
                             <div>
                                 <p class="text-sm font-mono text-gray-700 dark:text-gray-400">
-                                    投稿日時: {{ $answer->created_at }}
+                                    投稿: {{ $answer->created_at }}
                                 </p>
                                 @if ($answer->created_at != $answer->updated_at)
                                     <p class="text-sm font-mono text-gray-700 dark:text-gray-400">
-                                        更新日時: {{ $answer->updated_at }}
+                                        更新: {{ $answer->updated_at }}
                                     </p>
                                 @endif
                             </div>
@@ -163,11 +181,11 @@
                                             </div>
                                             <div>
                                                 <p class="text-xs font-mono text-gray-700 dark:text-gray-400">
-                                                    投稿日時: {{ $addition->created_at }}
+                                                    投稿: {{ $addition->created_at }}
                                                 </p>
                                                 @if ($addition->created_at != $addition->updated_at)
                                                     <p class="text-xs font-mono text-gray-700 dark:text-gray-400">
-                                                        更新日時: {{ $addition->updated_at }}
+                                                        更新: {{ $addition->updated_at }}
                                                     </p>
                                                 @endif
                                             </div>

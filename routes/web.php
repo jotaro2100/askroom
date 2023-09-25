@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
         ->name('additions.index');
 
     Route::resource('queries', QueryController::class); //質問CRUD
+    Route::get('/queries/{query}/resolve', [QueryController::class, 'toggleResolve'])->name('queries.resolve'); //解決トグル
 
     Route::post('/queries/{query}/answers', [AnswerController::class, 'store']) //回答C
         ->name('answers.store');

@@ -89,6 +89,25 @@ class QueryController extends Controller
             ->with('flash_message', '質問を投稿しました');
     }
 
+    public function toggleResolve(Query $query)
+    {
+        $this->authorize('update', $query);
+
+        if ($query->resolve == 1) {
+            $query->resolve = 0;
+            $flash_message = '質問を未解決に変更しました';
+        } else {
+            $query->resolve = 1;
+            $flash_message = '質問を解決済に変更しました';
+        }
+        $query->timestamps = false;
+        $query->save();
+
+        return redirect()
+            ->route('queries.show', $query)
+            ->with('flash_message', $flash_message);
+    }
+
     public function edit(Query $query)
     {
         $this->authorize('update', $query);
