@@ -21,7 +21,7 @@
                 animation.onfinish = function () {
                     flash.style.display = 'none';
                 };
-            }, 3000);
+            }, 2000);
         }
     };
 

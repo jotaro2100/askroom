@@ -32,8 +32,13 @@ Route::middleware('auth')->group(function () {
         ->name('answers.index');
     Route::get('/additions_queries', [AdditionController::class, 'index']) //補足した質問ページ
         ->name('additions.index');
+    Route::get('/resolved_queries', [QueryController::class, 'resolvedQueries']) //解決済の質問ページ
+        ->name('queries.resolved_queries');
+    Route::get('/unresolved_queries', [QueryController::class, 'unresolvedQueries']) //未解決の質問ページ
+        ->name('queries.unresolved_queries');
 
     Route::resource('queries', QueryController::class); //質問CRUD
+    Route::get('/queries/{query}/resolve', [QueryController::class, 'toggleResolve'])->name('queries.resolve'); //解決トグル
 
     Route::post('/queries/{query}/answers', [AnswerController::class, 'store']) //回答C
         ->name('answers.store');

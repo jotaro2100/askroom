@@ -18,11 +18,11 @@
                     <x-nav-link :href="route('queries.my_queries')" :active="request()->routeIs('queries.my_queries')">
                         自分の質問
                     </x-nav-link>
-                    <x-nav-link :href="route('answers.index')" :active="request()->routeIs('answers.index')">
-                        回答した質問
+                    <x-nav-link :href="route('queries.resolved_queries')" :active="request()->routeIs('queries.resolved_queries')">
+                        解決済の質問
                     </x-nav-link>
-                    <x-nav-link :href="route('additions.index')" :active="request()->routeIs('additions.index')">
-                        補足した質問
+                    <x-nav-link :href="route('queries.unresolved_queries')" :active="request()->routeIs('queries.unresolved_queries')">
+                        未解決の質問
                     </x-nav-link>
                 </div>
             </div>
@@ -44,6 +44,13 @@
                         </x-slot>
 
                         <x-slot name="content">
+                            <x-dropdown-link :href="route('answers.index')">
+                                回答した質問
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('additions.index')">
+                                補足した質問
+                            </x-dropdown-link>
+                            <hr class="border-gray-500">
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Profile') }}
                             </x-dropdown-link>
@@ -101,13 +108,19 @@
                     <x-responsive-nav-link :href="route('queries.my_queries')">
                         自分の質問
                     </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('queries.resolved_queries')">
+                        解決済の質問
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('queries.unresolved_queries')">
+                        未解決の質問
+                    </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('answers.index')">
                         回答した質問
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('additions.index')">
                         補足した質問
                     </x-responsive-nav-link>
-
+                    <hr class="border-gray-500">
                     <x-responsive-nav-link :href="route('profile.edit')">
                         {{ __('Profile') }}
                     </x-responsive-nav-link>

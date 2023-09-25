@@ -9,6 +9,22 @@ use App\Http\Requests\QueryRequest;
 
 class QueryController extends Controller
 {
+    private function getQueriesByResolveStatus(Request $request, $resolveStatus)
+    {
+        $search = $request->input('search');
+        $queryBuilder = Query::where('resolve', $resolveStatus)
+            ->orderBy('updated_at', 'DESC');
+
+        if ($search) {
+            $queryBuilder->where(function ($query) use ($search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        return $queryBuilder->orderBy('updated_at', 'DESC')->paginate(5);
+    }
+
     public function index(Request $request)
     {
         $queries = Query::orderBy('updated_at', 'DESC');
@@ -58,6 +74,34 @@ class QueryController extends Controller
             ]);
     }
 
+    public function resolvedQueries(Request $request)
+    {
+        $queries = $this->getQueriesByResolveStatus($request, 1);
+
+        return view('queries.index')
+            ->with([
+                'queries' => $queries,
+                'title' => '解決済の質問',
+                'search' => $request->input('search'),
+                'controller' => 'queries',
+                'method' => 'resolved_queries',
+            ]);
+    }
+
+    public function unresolvedQueries(Request $request)
+    {
+        $queries = $this->getQueriesByResolveStatus($request, 0);
+
+        return view('queries.index')
+            ->with([
+                'queries' => $queries,
+                'title' => '未解決の質問',
+                'search' => $request->input('search'),
+                'controller' => 'queries',
+                'method' => 'unresolved_queries',
+            ]);
+    }
+
     public function show(Query $query)
     {
         $editing = false;
@@ -87,6 +131,25 @@ class QueryController extends Controller
         return redirect()
             ->route('queries.index')
             ->with('flash_message', '質問を投稿しました');
+    }
+
+    public function toggleResolve(Query $query)
+    {
+        $this->authorize('update', $query);
+
+        if ($query->resolve == 1) {
+            $query->resolve = 0;
+            $flash_message = '質問を未解決に変更しました';
+        } else {
+            $query->resolve = 1;
+            $flash_message = '質問を解決済に変更しました';
+        }
+        $query->timestamps = false;
+        $query->save();
+
+        return redirect()
+            ->route('queries.show', $query)
+            ->with('flash_message', $flash_message);
     }
 
     public function edit(Query $query)
