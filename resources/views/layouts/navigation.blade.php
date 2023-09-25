@@ -50,7 +50,7 @@
                             <x-dropdown-link :href="route('additions.index')">
                                 補足した質問
                             </x-dropdown-link>
-                            <hr class="border-gray-500">
+                            <hr class="border-gray-500 my-1">
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Profile') }}
                             </x-dropdown-link>
