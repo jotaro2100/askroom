@@ -51,9 +51,11 @@
                                 補足した質問
                             </x-dropdown-link>
                             <hr class="border-gray-500 my-1">
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
+                            @if (Auth::user() != $guest_user)
+                                <x-dropdown-link :href="route('profile.edit')">
+                                    {{ __('Profile') }}
+                                </x-dropdown-link>
+                            @endif
 
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}">
@@ -121,9 +123,11 @@
                         補足した質問
                     </x-responsive-nav-link>
                     <hr class="border-gray-500">
-                    <x-responsive-nav-link :href="route('profile.edit')">
-                        {{ __('Profile') }}
-                    </x-responsive-nav-link>
+                    @if (Auth::user() != $guest_user)
+                        <x-responsive-nav-link :href="route('profile.edit')">
+                            {{ __('Profile') }}
+                        </x-responsive-nav-link>
+                    @endif
 
                     <!-- Authentication -->
                     <form method="POST" action="{{ route('logout') }}">
