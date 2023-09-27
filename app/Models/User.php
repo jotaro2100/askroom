@@ -6,7 +6,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -59,5 +61,14 @@ class User extends Authenticatable
     public function additions()
     {
         return $this->hasMany(Addition::class);
+    }
+
+    public static function guestLogin()
+    {
+        $guest_user = User::firstOrNew(['email' => 'guest@askroom.com']);
+        $guest_user->name = 'ゲスト';
+        $guest_user->password = Str::random(16);
+        $guest_user->save();
+        Auth::login($guest_user);
     }
 }

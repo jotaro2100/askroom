@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 
 class PasswordResetLinkController extends Controller
 {
@@ -25,6 +26,10 @@ class PasswordResetLinkController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        if ($request->email == Str::lower('guest@askroom.com')) {
+            return redirect()->back();
+        }
+
         $request->validate([
             'email' => ['required', 'email'],
         ]);
