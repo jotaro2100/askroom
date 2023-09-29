@@ -26,7 +26,7 @@ class AnswerController extends Controller
             });
         }
 
-        $queries = $queries->paginate(5);
+        $queries = $queries->with('user')->groupBy('queries.id')->paginate(5);
 
         return view('queries.index')
             ->with([

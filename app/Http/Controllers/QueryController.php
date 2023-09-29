@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Query;
+use App\Models\Addition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\QueryRequest;
+use Illuminate\Support\Facades\App;
 
 class QueryController extends Controller
 {
@@ -22,7 +24,7 @@ class QueryController extends Controller
             });
         }
 
-        return $queryBuilder->orderBy('updated_at', 'DESC')->paginate(5);
+        return $queryBuilder->with('user')->orderBy('updated_at', 'DESC')->paginate(5);
     }
 
     public function index(Request $request)
@@ -37,7 +39,7 @@ class QueryController extends Controller
             $queries = $query->orderBy('updated_at', 'DESC');
         }
 
-        $queries = $queries->paginate(5);
+        $queries = $queries->with('user')->paginate(5);
 
         return view('queries.index')
             ->with([
@@ -62,7 +64,9 @@ class QueryController extends Controller
             });
         }
 
-        $queries = $queries->orderBy('updated_at', 'DESC')->paginate(5);
+        $queries = $queries->with('user')
+                        ->orderBy('updated_at', 'DESC')
+                        ->paginate(5);
 
         return view('queries.index')
             ->with([
@@ -105,10 +109,12 @@ class QueryController extends Controller
     public function show(Query $query)
     {
         $editing = false;
+        $answers = $query->answers()->with('user', 'additions')->orderBy('updated_at', 'DESC')->get();
 
         return view('queries.show')
             ->with([
                 'query' => $query,
+                'answers' => $answers,
                 'answer_editing' => $editing,
                 'addition_editing' => $editing,
                 'answer_id' => 0,
