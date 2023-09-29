@@ -77,7 +77,7 @@
             </div>
 
             {{-- 回答一覧 --}}
-            @foreach ($query->answers->sortByDesc('updated_at') as $answer)
+            @foreach ($answers as $answer)
                 <div class="bg-white rounded-lg shadow-md p-6 mb-6 dark:bg-gray-800 dark:border-slate-800">
                     <div class="flex justify-between">
                         <div class="flex flex-col mb-5">
@@ -169,7 +169,7 @@
 
                     {{-- 補足一覧 --}}
                     <div class="additions_{{ $answer->id }}" style="display: none;">
-                        @foreach ($answer->additions as $addition)
+                        @foreach ($answer->additions()->with('user')->get() as $addition)
                             <div class="mt-6">
                                 <div class="bg-white rounded-lg shadow-md p-4 dark:bg-slate-700">
                                     <div class="flex justify-between mb-4">
