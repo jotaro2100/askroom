@@ -42,9 +42,18 @@
                         <h5 class="max-h-[28px] mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white overflow-hidden">
                             {{ $query->title }}
                         </h5>
-                        <p class="mb-2 font-bold text-gray-700 dark:text-gray-300">
-                            投稿者： {{ $query->user->name }}
-                        </p>
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="font-bold text-gray-700 dark:text-gray-300">
+                                投稿者： {{ $query->user->name }}
+                            </p>
+                            <div>
+                                @if ($query->resolve)
+                                    <p class="text-green-500 text-xs font-bold border border-green-500 px-2 py-1 rounded-md">解決済</p>
+                                @else
+                                    <p class="text-orange-500 text-xs font-bold border border-orange-500 px-2 py-1 rounded-md">未解決</p>
+                                @endif
+                            </div>
+                        </div>
                         <div class="max-h-[120px] font-normal text-gray-700 dark:text-gray-400 overflow-hidden">
                             {!! nl2br(e($query->content)) !!}
                         </div>
