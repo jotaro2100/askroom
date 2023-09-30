@@ -10,7 +10,7 @@
                 <div class="text-lg text-blue-500">
                     &lsaquo;&lsaquo; <a href="{{ route('queries.index') }}" class="hover:underline">一覧に戻る</a>
                 </div>
-                @if($query->user == Auth::user())
+                @can('update', $query)
                     <div class="flex items-center">
                         <div class="mr-5">
                             <a href="{{ route('queries.edit', $query) }}" type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm font-bold px-2 py-2 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
@@ -26,7 +26,7 @@
                             </button>
                         </form>
                     </div>
-                @endif
+                @endcan
             </div>
 
             {{-- 質問本文 --}}
@@ -98,25 +98,27 @@
                             </div>
                         </div>
                         <div>
-                            @if ($answer->user == Auth::user() && !$answer_editing && !$addition_editing)
-                                <div class="flex justify-end">
-                                    <div class="text-blue-500 mr-4">
-                                        <a href="{{ route('answers.edit', [$query, $answer]) }}" class="hover:underline">編集</a>
+                            @can('update', $answer)
+                                @unless ($answer_editing || $addition_editing)
+                                    <div class="flex justify-end">
+                                        <div class="text-blue-500 mr-4">
+                                            <a href="{{ route('answers.edit', [$query, $answer]) }}" class="hover:underline">編集</a>
+                                        </div>
+                                        <div class="text-red-500">
+                                            <form onsubmit="return confirm('本当に削除しますか？')" action="{{ route('answers.destroy', [$query, $answer]) }}" method="post">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button class="hover:underline">削除</button>
+                                            </form>
+                                        </div>
                                     </div>
-                                    <div class="text-red-500">
-                                        <form onsubmit="return confirm('本当に削除しますか？')" action="{{ route('answers.destroy', [$query, $answer]) }}" method="post">
-                                            @method('DELETE')
-                                            @csrf
-                                            <button class="hover:underline">削除</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            @endif
+                                @endif
+                            @endcan
                         </div>
                     </div>
 
                     {{-- 認証ユーザーの回答の場合 --}}
-                    @if ($answer->user == Auth::user())
+                    @can('update', $answer)
                         {{-- 回答編集メソッド発火時 --}}
                         @if ($answer_editing && ($answer->id == $edit_answer_id))
                             {{-- 回答編集フォームを表示 --}}
@@ -149,7 +151,7 @@
                         <div class="min-h-[180px]">
                             <p class="text-gray-700 dark:text-gray-300 break-words">{!! nl2br(e($answer->content)) !!}</p>
                         </div>
-                    @endif
+                    @endcan
 
                     @if ($answer->additions->isEmpty())
                         @if (!$addition_editing && !$answer_editing)
@@ -159,7 +161,7 @@
                             </div>
                         @endif
                     @else
-                        @if (!$addition_editing && !$answer_editing)
+                        @unless ($addition_editing || $answer_editing)
                             <div class="text-white text-center cursor-pointer text-xs leading-3 hover:text-blue-500 w-fit mx-auto mt-6" onclick="toggleAdditions({{ $answer->id }})">
                                 <p id="showAdditionsBtn_{{ $answer->id }}">この回答の補足を見る<br>&or;</p>
                                 <p id="hideAdditionsBtn_{{ $answer->id }}" style="display: none;" class="mb-8">&and;<br>閉じる</p>
@@ -169,7 +171,7 @@
 
                     {{-- 補足一覧 --}}
                     <div class="additions_{{ $answer->id }}" style="display: none;">
-                        @foreach ($answer->additions()->with('user')->get() as $addition)
+                        @foreach ($answer->additions->load('user') as $addition)
                             <div class="mt-6">
                                 <div class="bg-white rounded-lg shadow-md p-4 dark:bg-slate-700">
                                     <div class="flex justify-between mb-4">
@@ -191,25 +193,27 @@
                                             </div>
                                         </div>
                                         <div>
-                                            @if ($addition->user == Auth::user() && !$answer_editing && !$addition_editing)
-                                                <div class="flex justify-end">
-                                                    <div class="text-blue-500 mr-4">
-                                                        <a href="{{ route('additions.edit', [$query, $answer, $addition]) }}" class="hover:underline">編集</a>
+                                            @can('update', $addition)
+                                                @unless ($answer_editing || $addition_editing)
+                                                    <div class="flex justify-end">
+                                                        <div class="text-blue-500 mr-4">
+                                                            <a href="{{ route('additions.edit', [$query, $answer, $addition]) }}" class="hover:underline">編集</a>
+                                                        </div>
+                                                        <div class="text-red-500">
+                                                            <form onsubmit="return confirm('本当に削除しますか？')" action="{{ route('additions.destroy', [$query, $answer, $addition]) }}" method="post">
+                                                                @method('DELETE')
+                                                                @csrf
+                                                                <button class="hover:underline">削除</button>
+                                                            </form>
+                                                        </div>
                                                     </div>
-                                                    <div class="text-red-500">
-                                                        <form onsubmit="return confirm('本当に削除しますか？')" action="{{ route('additions.destroy', [$query, $answer, $addition]) }}" method="post">
-                                                            @method('DELETE')
-                                                            @csrf
-                                                            <button class="hover:underline">削除</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            @endif
+                                                @endif
+                                            @endcan
                                         </div>
                                     </div>
 
                                     {{-- 認証ユーザーの補足の場合 --}}
-                                    @if ($addition->user == Auth::user())
+                                    @can('update', $addition)
                                         {{-- 補足編集メソッド発火時 --}}
                                         @if ($addition_editing && ($addition->id == $edit_addition_id))
                                             <div>
@@ -239,13 +243,13 @@
                                         @endif
                                     @else
                                         <p class="mb-4 text-gray-700 dark:text-gray-300 break-words">{!! nl2br(e($addition->content)) !!}</p>
-                                    @endif
+                                    @endcan
                                 </div>
                             </div>
                         @endforeach
 
                         {{-- 補足の新規投稿フォーム --}}
-                        @if (!$addition_editing)
+                        @unless ($addition_editing)
                             <div class="mt-8">
                                 <form action="{{ route('additions.store', [$query, $answer]) }}" method="post">
                                     @csrf
@@ -268,7 +272,7 @@
             @endforeach
 
             {{-- 回答の新規投稿フォーム --}}
-            @if (!$answer_editing && !$addition_editing)
+            @unless ($answer_editing || $addition_editing)
                 <div class="block px-4 py-6 bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 md:px-8">
                     <form id="answer-form" action="{{ route('answers.store', $query) }}" method="post">
                         @csrf

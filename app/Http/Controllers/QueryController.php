@@ -109,7 +109,9 @@ class QueryController extends Controller
     public function show(Query $query)
     {
         $editing = false;
-        $answers = $query->answers()->with('user', 'additions')->orderBy('updated_at', 'DESC')->get();
+        $answers = $query->answers
+                    ->load('user', 'additions')
+                    ->sortByDesc('updated_at');
 
         return view('queries.show')
             ->with([
