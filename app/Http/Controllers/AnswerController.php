@@ -57,11 +57,15 @@ class AnswerController extends Controller
 
         $editing = true;
         $edit_answer_id = $answer->id;
+        $answers = $query->answers
+            ->load('user', 'additions')
+            ->sortByDesc('updated_at');
 
         return view('queries.show')
             ->with([
                 'query' => $query,
                 'answer' => $answer,
+                'answers' => $answers,
                 'answer_editing' => $editing,
                 'addition_editing' => false,
                 'edit_answer_id' => $edit_answer_id,

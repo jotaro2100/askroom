@@ -81,11 +81,15 @@ class AdditionController extends Controller
         $addition_editing = true;
         $edit_addition_id = $addition->id;
         $answer_id = $addition->answer->id;
+        $answers = $query->answers
+            ->load('user', 'additions')
+            ->sortByDesc('updated_at');
 
         return view('queries.show')
             ->with([
                 'query' => $query,
                 'answer' => $answer,
+                'answers' => $answers,
                 'answer_editing' => false,
                 'addition_editing' => $addition_editing,
                 'edit_addition_id' => $edit_addition_id,
