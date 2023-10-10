@@ -333,10 +333,10 @@
         editAddtion();
     </script>
 
-    @if (!is_null($ansId))
+    @unless (is_null(session('ansId')))
         <script>
             // 新規補足のバリデーションエラー時に該当のフォームを展開
-            let ansId = {{ $ansId }};
+            let ansId = {{ session('ansId') }};
             let expandBtn = document.getElementById('showAdditionsBtn_' + ansId);
 
             expandBtn.click();

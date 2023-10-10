@@ -6,8 +6,8 @@ use App\Models\Query;
 use App\Models\Answer;
 use App\Models\Addition;
 use Illuminate\Http\Request;
+use App\Http\Requests\AdditionRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class AdditionController extends Controller
 {
@@ -41,28 +41,8 @@ class AdditionController extends Controller
             ]);
     }
 
-    public function store(Request $request, Query $query, Answer $answer)
+    public function store(AdditionRequest $request, Query $query, Answer $answer)
     {
-        $rules = [
-            "addition_content{$answer->id}" => 'required|min:5|max:300',
-        ];
-
-        $messages = [
-            "addition_content{$answer->id}.required" => "補足を入力してください",
-            "addition_content{$answer->id}.min" => "補足は :min 文字以上で入力してください",
-            "addition_content{$answer->id}.max" => "補足は :max 文字以下で入力してください",
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        // バリデーションエラー時に該当のフォームの$answer->idを返却
-        if ($validator->fails())
-        {
-            return redirect()->back()->with([
-                'ansid' => $request->answer->id,
-            ])->withErrors($validator)->withInput();
-        }
-
         $addition = new Addition();
         $addition->user_id = Auth::id();
         $addition->answer_id = $answer->id;
@@ -97,20 +77,14 @@ class AdditionController extends Controller
             ]);
     }
 
-    public function update(Request $request, Query $query, $answer, Addition $addition)
+    public function update(AdditionRequest $request, Query $query, $answer, Addition $addition)
     {
         $this->authorize('update', $addition);
 
-        $request->validate([
-            "addition_content{$answer->id}" => 'required|min:5|max:300',
-        ], [
-            "addition_content{$answer->id}.required" => "補足を入力してください",
-            "addition_content{$answer->id}.min" => "補足は :min 文字以上で入力してください",
-            "addition_content{$answer->id}.max" => "補足は :max 文字以下で入力してください",
-        ]);
-
         $addition->content = $request->input("addition_content"."{$answer->id}");
         $addition->save();
+
+        $request->session()->flash('ansId', $answer->id);
 
         return redirect()
             ->route('queries.show', $query)
