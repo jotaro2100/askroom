@@ -293,10 +293,6 @@
         </div>
     </div>
 
-    @php
-        $ansId = session('ansid');
-    @endphp
-
     <script>
         'use strict';
 
