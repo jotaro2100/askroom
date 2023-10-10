@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
     {
         $users = User::factory(20)->create();
         $queries = Query::factory(30)->recycle($users)->create();
-        $answers = Answer::factory(40)->recycle($users)->recycle($queries)->create();
+        $answers = Answer::factory(50)->recycle($users)->recycle($queries)->create();
         Addition::factory(80)->recycle($users)->recycle($answers)->create();
     }
 }
