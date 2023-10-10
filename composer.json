@@ -30,7 +30,13 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "exclude-from-classmap": [
+            "vendor\\laravel\\framework\\src\\Illuminate\\Pagination\\UrlWindow.php"
+        ],
+        "files": [
+            "app\\vendor\\laravel\\framework\\src\\Illuminate\\Pagination\\UrlWindow.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
