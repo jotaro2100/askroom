@@ -49,6 +49,8 @@ class AdditionController extends Controller
         $addition->content = $request->input("addition_content"."{$answer->id}");
         $addition->save();
 
+        $request->session()->flash('ansId', $answer->id);
+
         return redirect()
             ->route('queries.show', $query)
             ->with('flash_message', '補足を投稿しました');
