@@ -78,7 +78,7 @@
 
             {{-- 回答一覧 --}}
             @foreach ($answers as $answer)
-                <div class="bg-white rounded-lg shadow-md p-6 mb-6 dark:bg-gray-800 dark:border-slate-800">
+                <div id="answer_{{ $answer->id }}" class="bg-white rounded-lg shadow-md p-6 mb-6 dark:bg-gray-800 dark:border-slate-800">
                     <div class="flex justify-between">
                         <div class="flex flex-col mb-5">
                             <div>
@@ -172,7 +172,7 @@
                     {{-- 補足一覧 --}}
                     <div class="additions_{{ $answer->id }}" style="display: none;">
                         @foreach ($answer->additions->load('user') as $addition)
-                            <div class="mt-6">
+                            <div id="addition_{{ $addition->id }}" class="mt-6">
                                 <div class="bg-white rounded-lg shadow-md p-4 dark:bg-slate-700">
                                     <div class="flex justify-between mb-4">
                                         <div class="flex flex-col justify-between">
@@ -293,10 +293,6 @@
         </div>
     </div>
 
-    @php
-        $ansId = session('ansid');
-    @endphp
-
     <script>
         'use strict';
 
@@ -333,13 +329,30 @@
         editAddtion();
     </script>
 
-    @if (!is_null($ansId))
+    @unless (is_null(session('ansId')))
         <script>
-            // 新規補足のバリデーションエラー時に該当のフォームを展開
-            let ansId = {{ $ansId }};
+            // 新規補足のバリデーションエラー時と投稿時に該当のフォームを展開
+            let ansId = {{ session('ansId') }};
             let expandBtn = document.getElementById('showAdditionsBtn_' + ansId);
 
             expandBtn.click();
+        </script>
+    @endif
+
+    @unless (is_null(session('additionId')))
+        <script>
+            // 補足投稿完了後に該当の補足まで自動でスクロールする
+            let additionId = {{ session('additionId') }};
+            console.log(additionId);
+            const targetAddition = document.getElementById('addition_' + additionId);
+
+            if (targetAddition) {
+                const elementPosition = targetAddition.getBoundingClientRect().top + window.pageYOffset-300;
+
+                window.scrollTo({
+                    top: elementPosition,
+                });
+            }
         </script>
     @endif
 
@@ -352,7 +365,6 @@
 
             window.scrollTo({
                 top: elementPosition,
-                behavior: 'smooth'
             });
         }
     </script>

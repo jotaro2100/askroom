@@ -19,6 +19,9 @@
         <!-- FontAwesome -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
 
+        <!-- フラッシュ -->
+        <link rel="stylesheet" href="/css/flash-message.css">
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -45,10 +48,5 @@
                 @include('layouts.footer')
             </div>
         </div>
-
-        <script src="{{ asset('js/flash-message.js') }}"></script>
-        <script>
-            localStorage.theme = 'dark'
-        </script>
     </body>
 </html>

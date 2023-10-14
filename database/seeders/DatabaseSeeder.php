@@ -3,6 +3,11 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\User;
+use App\Models\Query;
+use App\Models\Answer;
+use App\Models\Addition;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,11 +17,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $users = User::factory(20)->create();
+        $queries = Query::factory(30)->recycle($users)->create();
+        $answers = Answer::factory(50)->recycle($users)->recycle($queries)->create();
+        Addition::factory(80)->recycle($users)->recycle($answers)->create();
     }
 }
