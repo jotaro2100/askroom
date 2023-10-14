@@ -1,7 +1,7 @@
 #flash {
 	animation: flash 3s forwards;
-    width: 240px;
-    left: calc(50% - 120px);
+    width: 220px;
+    left: calc(50% - 110px);
 }
 
 @keyframes flash {
