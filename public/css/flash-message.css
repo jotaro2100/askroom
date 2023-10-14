@@ -1,0 +1,23 @@
+#flash {
+	animation: flash 3s forwards;
+    width: 240px;
+    left: calc(50% - 120px);
+}
+
+@keyframes flash {
+	0% {
+		transform: translateY(-50%);
+		opacity: 0;
+	}
+
+	10%, 90% {
+		transform: none;
+		opacity: 1;
+	}
+
+	100% {
+		transform: translateY(-50%);
+		opacity: 0;
+		pointer-events: none;
+	}
+}
