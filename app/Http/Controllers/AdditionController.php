@@ -50,6 +50,7 @@ class AdditionController extends Controller
         $addition->save();
 
         $request->session()->flash('ansId', $answer->id);
+        $request->session()->flash('additionId', $addition->id);
 
         return redirect()
             ->route('queries.show', $query)
@@ -87,6 +88,7 @@ class AdditionController extends Controller
         $addition->save();
 
         $request->session()->flash('ansId', $answer->id);
+        $request->session()->flash('additionId', $addition->id);
 
         return redirect()
             ->route('queries.show', $query)
