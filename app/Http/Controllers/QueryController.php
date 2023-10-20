@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Query;
-use App\Models\Addition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\QueryRequest;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Session;
 
 class QueryController extends Controller
 {
