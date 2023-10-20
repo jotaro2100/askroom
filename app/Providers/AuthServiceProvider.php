@@ -11,7 +11,6 @@ use App\Policies\AdditionPolicy;
 use App\Models\Query;
 use App\Models\Answer;
 use App\Models\Addition;
-use App\Models\User;
 
 class AuthServiceProvider extends ServiceProvider
 {
